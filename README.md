@@ -13,7 +13,7 @@
 6. *OpenCV*
 7. *Pandas*
 
-#### Введение Машинное обучение
+#### Введение в Машинное обучение
 8. Часть 1. Знакомство с *Scikit-learn*
 9. Часть 2. Применение *Scikit-learn*
 
@@ -23,4 +23,8 @@ sudo apt install  python3-nbconvert
 
 python3 -m nbconvert --to markdown Lesson${i}.ipynb
 ```
-
+# Установка библиотек через apt
+```
+sudo apt update
+sudo apt install python3-opencv python3-pandas python3-sklearn python3-xgboost
+```
