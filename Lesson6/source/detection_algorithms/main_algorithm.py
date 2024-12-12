@@ -32,7 +32,8 @@ def BruteForce_Matching_k2(descriptors_template, descriptors_scene):
     #  + matches — список пар (по 2) ближайших соседей для каждой ключевой точки шаблона.
     """
     bf = cv2.BFMatcher()
-    matches = bf.knnMatch(descriptors_template, descriptors_scene, k=2) # k-ближайших соседей (k-NN)
+    # knn = k nearest neighbors = k-ближайших соседей
+    matches = bf.knnMatch(descriptors_template, descriptors_scene, k=2)
     
     return matches
 
@@ -42,7 +43,7 @@ def filter_matches(matches) -> list:
     # Идея:
     #  + Для каждой пары ближайших соседей m и n проверяется, насколько первая точка (ближайший сосед) лучше второй.
     #  + Метрика качества определяется расстоянием (distance) между дескрипторами.
-    #  + Если первая точка на 25% (или больше) ближе, чем вторая, то совпадение считается "хорошим".
+    #  + Если первая точка на 25% (или больше) ближе, чем вторая, то совпадение считается "хорошим" (правило Lowe).
     #
     # Результат: в good_matches сохраняются только те совпадения, которые проходят фильтр.
     """
@@ -107,16 +108,19 @@ def detect_and_draw(scene: np.ndarray, scene_without_fond_ghosts: np.ndarray, te
     # 1. Создание детектора точек
     key_points_algorithm = create_detector_algorithm("SIFT")
 
-    # 2. Обнаружение ключевых точек и дескрипторов
+    # 2. Обнаружение ключевых точек и вычисления дескрипторов
     keypoints_template, descriptors_template = key_points_algorithm.detectAndCompute(template, None)
-    keypoints_scene, descriptors_scene = key_points_algorithm.detectAndCompute(scene_without_fond_ghosts, None)
-    # detectAndCompute():
+    keypoints_scene   , descriptors_scene    = key_points_algorithm.detectAndCompute(scene_without_fond_ghosts, None)
+    # detectAndCompute(image, mask):
     #  + Находит ключевые точки — это особенные области изображения (например, углы, края), которые устойчивы к изменению масштаба, поворота и освещения.
     #  + Вычисляет дескрипторы — численные векторы, описывающие найденные ключевые точки.
+    #  mask - маска на которой нужно вычислять. 
     #
     # Результат:
     #  + keypoints_scene и keypoints_template — списки ключевых точек для каждого изображения.
     #  + descriptors_scene и descriptors_template — дескрипторы для каждой ключевой точки.
+    #  keypoints: List[cv2.KeyPoint]
+    #  descriptors:   numpy.ndarray
 
     # 3. Сопоставление ключевых точек
     matches = BruteForce_Matching_k2(descriptors_template, descriptors_scene)

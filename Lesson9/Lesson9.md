@@ -2,8 +2,6 @@
 https://scikit-learn.ru/user_guide/
 
 ## Соревнование Kaggle "Titanic: Machine Learning from Disaster"
-
-
 ```python
 import pandas as pd
 import numpy as np
@@ -427,7 +425,7 @@ $$
 
 ### Прирост информации
 $$
-IG = S_0 - \sum_q{N_i\over N}S_i
+IG = S_0 - {\sum_{q}N_i\N S_i}
 $$
 q - число групп после разбиения  
 $N_i$ – число элементов выборки
