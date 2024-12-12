@@ -1,1 +1,4 @@
 MNIST
+__pycache__
+processed_data/
+trained_data/
