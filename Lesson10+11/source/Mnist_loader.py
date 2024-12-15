@@ -1,4 +1,5 @@
 import torchvision
+import numpy as np
 from torchvision.datasets import MNIST
 
 
@@ -18,7 +19,7 @@ class MNISTLoader:
 		return self._process_data(dataset)
 
 	@staticmethod
-	def _process_data(data: MNIST):
+	def _process_data(data: MNIST) -> list[np.array, np.array]:
 		# np.eye(10) создает матрицу размером 10x10, где по диагонали стоят единицы.
 		labels = np.eye(10)[[x[1] for x in data]].astype(float)
 

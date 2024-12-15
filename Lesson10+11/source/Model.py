@@ -4,6 +4,32 @@ import os
 from PIL import Image
 
 
+class DigitClassifier:
+	"""Классификатор для распознавания конкретной цифры."""
+	def __init__(self, avg_digit: np.ndarray, bias: int):
+		"""
+		Инициализирует классификатор.
+		:param avg_digit: Матрица среднего изображения для цифры.
+		:param bias: Смещение (bias) для классификатора.
+		"""
+		self.bias = bias
+		self.weights = np.transpose(avg_digit)
+
+	@staticmethod
+	def binary_step(x: float) -> bool:
+		return x >= 0
+
+	def predict_digit(self, image: np.ndarray) -> bool:
+		"""
+		Предсказывает, является ли изображение целевой цифрой.
+		:param image: Входное изображение в виде вектора.
+		:return: True, если изображение распознано как целевая цифра, иначе False.
+		"""
+		W = self.weights
+		res = (np.dot(W, image) - self.bias) / np.linalg.norm(W)
+		return self.binary_step(res)
+
+
 class Perceptron:
 	"""Класс Перцептрона."""
 	def __init__(self, train_data, load_trained: bool, trained_path: str):
@@ -11,14 +37,35 @@ class Perceptron:
 			self.avg_digits = self._load_trained_data(trained_path)
 		else:
 			self.avg_digits = [self._compute_average_digit(train_data, digit) for digit in range(10)]
-			
-		self.weights = [np.transpose(avg) for avg in self.avg_digits]
-		self.biases = random.choices(population=range(40, 70), k=10)
+
+		# biases = random.choices(population=range(40, 70), k=10)
+		biases = self._compute_average_biases(train_data)
+		# Создаем классификаторы для каждой цифры
+		self.digitClassifiers = [
+			DigitClassifier(self.avg_digits[i], biases[i]) for i in range(10)
+		]
+
 
 	@staticmethod
 	def _compute_average_digit(data, digit):
 		filtered_data = [x[0] for x in data if np.argmax(x[1]) == digit]
 		return np.mean(filtered_data, axis=0)
+
+	def _compute_average_biases(self, data):
+		biases = []
+		for num in range(10):
+			W = np.transpose(self.avg_digits[num])
+			filtered_data = [x[0] for x in data if np.argmax(x[1]) == num]  # Выбираем данные для текущей цифры
+			avg_dot = np.mean([np.dot(W, image) for image in filtered_data])  # Средний результат скалярного произведения
+			biases.append(avg_dot)
+		return np.array(biases)
+
+	def predict(self, image) -> list[int]:
+		"""Получает логиты модели для входного изображения."""
+		prediction = [0] * 10
+		for digit in range(10):
+			prediction[digit] = self.digitClassifiers[digit].predict_digit(image)
+		return prediction
 
 	def _load_trained_data(self, path):
 		avg_digits = []
@@ -46,23 +93,5 @@ class Perceptron:
 			normalized_img = np.reshape(normalized_avg, (28, 28)).astype(np.uint8)
 			avg_img = Image.fromarray(normalized_img)
 			avg_img.save(avg_file_path)
-
-	def predict_digit(self, image, digit) -> bool:
-		W = self.weights[digit]
-		bias: int = self.biases[digit]
-		
-		def binary_step(x):
-			return True if x >= 0 else False
-		
-		res = (np.dot(W, image) - bias) / np.linalg.norm(W)
-		return binary_step(res)
-
-	def predict(self, image):
-		prediction = [0] * 10
-		for digit in range(10):
-			if self.predict_digit(image, digit):
-				prediction[digit] = 1
-				break
-		return prediction
 
 
