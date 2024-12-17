@@ -8,7 +8,7 @@ class MNISTLoader:
 	def __init__(self, root: str):
 		self.root = root
 
-	def load_data(self, train: bool):
+	def load_data(self, train: bool) -> list[np.array, np.array]:
 		dataset = torchvision.datasets.MNIST(
 			root=self.root,
 			train=train,

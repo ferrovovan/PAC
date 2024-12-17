@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 
 from Model import Perceptron
-from Metrics import Evaluator, ReportGenerator, Visualizer_with_tsne
+from Metrics import Evaluator, ReportGenerator
 from Mnist_loader import MNISTLoader
-from sklearn.metrics import precision_score, recall_score
-
+from Visualizer import Visualizer_with_tsne
 
 import os
 import pickle
@@ -14,7 +13,7 @@ def echo_green(text: str):
 	print(f"\033[0;32m{text}\033[0m")
 
 def echo_yellow(text: str):
-    print(f"\033[0;33m{text}\033[0m")
+	print(f"\033[0;33m{text}\033[0m")
 
 def save_processed_data(processed_data, filename):
 	"""Сохраняет обработанные данные в файл с использованием pickle."""
@@ -27,16 +26,16 @@ def load_processed_data(filename):
 		return pickle.load(f)
 
 def create_processed_data_folder(folder: str):
-    """Создаёт папку './processed_data', если её ещё не существует."""
-    os.makedirs(folder, exist_ok=True)
+	"""Создаёт папку './processed_data', если её ещё не существует."""
+	os.makedirs(folder, exist_ok=True)
 
 
 def main():
-	load_data  = 0
+	load_data  = 1
 	data_dir = "./processed_data"
-	load_model = 0
+	load_model = 1
 	save_model = 0
-	evaluate_model = 1
+	evaluate_model = 0
 	visualize_with_tsne = 1
 
 	train_data: list[np.array, np.array]
@@ -73,17 +72,14 @@ def main():
 	
 	if visualize_with_tsne:
 		visualizer = Visualizer_with_tsne(model=model)
-		echo_yellow("Визуализация данных с помощью t-SNE")
+		echo_yellow("Визуализация данных с помощью t-SNE:")
 		echo_yellow("Необработанные изображения...")
-		visualizer.visualize_with_tsne(train_data[:300])
+		# visualizer.visualize_with_tsne(train_data[:300])
 
 		echo_yellow("Предсказания модели...")
-		visualizer.visualize_logits_with_tsne(test_data[:300])
+		visualizer.visualize_logits_with_tsne(test_data)
 
 
 if __name__ == "__main__":
 	main()
 
-"""
-Укажу тебе статистику счётов, и назначаемые байесы, ты скажи какой поставить.
-"""

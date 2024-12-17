@@ -1,4 +1,3 @@
-import random
 import numpy as np
 import os
 from PIL import Image
@@ -12,22 +11,12 @@ class DigitClassifier:
 		:param avg_digit: Матрица среднего изображения для цифры.
 		:param bias: Смещение (bias) для классификатора.
 		"""
-		self.bias = bias
-		self.weights = np.transpose(avg_digit)
+		self.bias: int = bias
+		self.weights: np.array = np.transpose(avg_digit)
 
-	@staticmethod
-	def binary_step(x: float) -> bool:
-		return x >= 0
-
-	def predict_digit(self, image: np.ndarray) -> bool:
-		"""
-		Предсказывает, является ли изображение целевой цифрой.
-		:param image: Входное изображение в виде вектора.
-		:return: True, если изображение распознано как целевая цифра, иначе False.
-		"""
+	def predict_digit(self, image: np.ndarray) -> float:
 		W = self.weights
-		res = (np.dot(W, image) - self.bias) / np.linalg.norm(W)
-		return self.binary_step(res)
+		return (np.dot(W, image) - self.bias) / np.linalg.norm(W)
 
 
 class Perceptron:
@@ -38,7 +27,6 @@ class Perceptron:
 		else:
 			self.avg_digits = [self._compute_average_digit(train_data, digit) for digit in range(10)]
 
-		# biases = random.choices(population=range(40, 70), k=10)
 		biases = self._compute_average_biases(train_data)
 		# Создаем классификаторы для каждой цифры
 		self.digitClassifiers = [
@@ -60,12 +48,24 @@ class Perceptron:
 			biases.append(avg_dot)
 		return np.array(biases)
 
-	def predict(self, image) -> list[int]:
-		"""Получает логиты модели для входного изображения."""
-		prediction = [0] * 10
-		for digit in range(10):
-			prediction[digit] = self.digitClassifiers[digit].predict_digit(image)
-		return prediction
+	@staticmethod
+	def _processed_predictions(num_vector: list[float]) -> np.ndarray[float]:
+		predictions = np.zeros(10, dtype=float)  # Создаем массив нулей из 10 элементов
+		max_index = np.argmax(num_vector)      # Находим индекс максимального значения
+		predictions[max_index] = 1             # Присваиваем 1 на позиции максимального значения
+		return predictions
+
+	def predict(self, image: np.ndarray) -> np.ndarray[float]:
+		"""
+		Возвращает логиты модели для входного изображения.
+		:return: np.ndarray[0, 0, 1.0, ... , 0, 0]
+		"""
+		predictions: list[float] = [
+			self.digitClassifiers[digit].predict_digit(image)
+			for digit in range(10)
+		]
+		return self._processed_predictions(predictions)
+
 
 	def _load_trained_data(self, path):
 		avg_digits = []
@@ -79,7 +79,6 @@ class Perceptron:
 			avg_img = Image.open(avg_file_path).convert("L")  # Конвертируем в grayscale
 			avg_array = np.array(avg_img).astype(float) / 255  # Возвращаем в диапазон [0, 1]
 			avg_digits.append(avg_array.reshape(784, 1))
-
 		return avg_digits
 
 	def save_trained_data(self, save_path: str):

@@ -1,6 +1,4 @@
 import numpy as np
-from sklearn.manifold import TSNE
-import matplotlib.pyplot as plt
 from Model import Perceptron
 
 class Evaluator:
@@ -106,44 +104,3 @@ class ReportGenerator:
 		print(f"Total Recall: {total_recall:.3f}")
 		print(f"Total Accuracy: {total_accuracy:.3f}")
 
-
-
-class Visualizer_with_tsne:
-	"""Класс визуализаций с помощью алгоритма t-SNE"""
-	def __init__(self, model):
-		self.model: Perceptron = model
-
-	def visualize_with_tsne(self, data):
-		"""Визуализирует данные с помощью t-SNE."""
-		images = np.array([x[0] for x in data])
-		labels = np.array([np.argmax(x[1]) for x in data])
-
-		tsne = TSNE(n_components=2, random_state=42)
-		transformed = tsne.fit_transform(images)
-
-		plt.figure(figsize=(10, 8))
-		scatter = plt.scatter(transformed[:, 0], transformed[:, 1], c=labels, cmap='tab10')
-		plt.title('Samples from Training Data')
-		plt.colorbar(scatter)
-		plt.show()
-
-
-	def visualize_logits_with_tsne(self, data):
-		"""Визуализирует логиты модели с помощью t-SNE."""
-		images = np.array([x[0] for x in data])
-		labels = np.array([np.argmax(x[1]) for x in data])
-
-		# Получаем логиты для всех изображений
-		logits = np.array([self.model.predict(image) for image in images])
-
-		# Применяем t-SNE
-		tsne = TSNE(n_components=2, random_state=42)
-		transformed = tsne.fit_transform(logits)
-
-		# Визуализация
-		plt.figure(figsize=(10, 8))
-		scatter = plt.scatter(transformed[:, 0], transformed[:, 1], c=labels, cmap='tab10', alpha=0.7)
-		plt.title('Results on Training Data')
-		# plt.title('Logits Visualization (t-SNE)')
-		plt.colorbar(scatter)
-		plt.show()
