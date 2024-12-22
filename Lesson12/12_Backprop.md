@@ -24,18 +24,18 @@ $$ \delta ω_0 = 2  \lambda (Y−y)y(1−y) - смещение$$
 
 Геометрический смысл этих формул прост. Пусть $Y=1$, а нейрон выдаёт $y≪1$. Тогда вектор нормали (и плоскость) повернётся в сторону примера $x$, а $ω_0$ увеличится, т.е. плоскость сдвинется в противоположную от входа сторону. Когда $Y=0$, а $y∼1$, множитель Y−y становится отрицательным и всё произойдёт с точностью до наоборот.
 
-<img src="images/LessonsII/grad_step.png" width=15% height=15% />
+<img src="images/grad_step.png" width=15% height=15% />
 
 ### Многомерный случай
 
 Обозначим набор параметров модели вектором $w$. Ошибка является их функцией $L=L(w)$. В пространстве параметров существуют поверхности постоянного значения $L(w)=const$. Смещение $dw$ вдоль таких поверхностей не меняет $L$ и, следовательно, её диффернциал равен нулю:
 
-<img src="images/LessonsII/dl_dw.png" width=75% height=75% />
+<img src="images/dl_dw.png" width=75% height=75% />
 
 
 Такими образом, вектор градиента $g$ перпендикулярен поверхностям $L=const$ и направлен в сторону увеличения $L$ (как и любая производная). При приближении к минимуму длина градиента, обычно уменьшается, а в точке минимума (экстремум) она равна нулю (выше второй рисунок).
 
-<img src="images/LessonsII/g_dl_dw.png" width=15% height=15% />
+<img src="images/g_dl_dw.png" width=15% height=15% />
 
 Чтобы найти минимум $L$, необходимо двигаться в обратном к градиенту направлении (вдоль антиградиента), с шагом пропорциональным некоторому числу $\lambda$. 
 
@@ -70,7 +70,7 @@ $$
 *E* - скорость обучения  
 $\alpha$ - момент
 
-<img src="images/LessonsII/backprop.gif" width=70% height=70% />
+<img src="images/backprop.gif" width=70% height=70% />
 
 Ошибка выходного нейрона
 $$
@@ -130,21 +130,21 @@ $$
 
 # Функци активации
 ## Сигмоида
-<img src="images/LessonsII/sigmoid.png" width=30% height=30% />
+<img src="images/sigmoid.png" width=30% height=30% />
 
 $
 F(x) = {1 \over 1 + e^{-x}}
 $
 
 ## Гиперболический тангенс
-<img src="images/LessonsII/tanh.png" width=30% height=30% />
+<img src="images/tanh.png" width=30% height=30% />
 
 $
 F(x) = {e^{2x}-1 \over e^{2x}+1}
 $
 
 ## ReLU (rectified linear unit)
-<img src="images/LessonsII/ReLU.png" width=40% height=40% />
+<img src="images/ReLU.png" width=40% height=40% />
 
 $
 F(x) = max(0, x)
@@ -159,7 +159,7 @@ $
 F(x) = {e^{x} \over \sum_j e^{x_j}}
 $
 
-<img src="images/LessonsII/common_act_func.png" width=70% height=70% />
+<img src="images/common_act_func.png" width=70% height=70% />
  Скорость обучения logistic-ой функции активации низкая с определенного момента (x > 3)
 
 # Функция потерь
@@ -304,7 +304,7 @@ cross_entropy(y, pred) # binary_cross_entropy(y, pred)
 
 
 
-<img src="images/LessonsII/cross_entr.png" alt="SoftMax" height=80% width=80%>
+<img src="images/cross_entr.png" alt="SoftMax" height=80% width=80%>
 
 
 ```python
@@ -312,59 +312,59 @@ cross_entropy(y, pred) # binary_cross_entropy(y, pred)
 ```
 
 # Граф вычислений
-<img src="images/LessonsII/graph.png" alt="gr" height=50% width=50%>
+<img src="images/graph.png" alt="gr" height=50% width=50%>
 
 # Обратное распространение ошибки. Пример
 
 - функция:
 $$f(x,w) = 1 + e^{w_1x+w_0}$$
-<img src="images/LessonsII/back1_1.png" alt="Back1" height=40% width=40%>
+<img src="images/back1_1.png" alt="Back1" height=40% width=40%>
 
 - Начальное состояение весов и входного значения:
-<img src="images/LessonsII/back1_2.png" alt="back1_2" height=40% width=40%>
+<img src="images/back1_2.png" alt="back1_2" height=40% width=40%>
 
 - Посчитаем значения по прямому проходу
-<img src="images/LessonsII/back1_3.png" height=40% width=40%>
+<img src="images/back1_3.png" height=40% width=40%>
 
 - Для удобства обозначим узлы (подфункции)
-<img src="images/LessonsII/back1_4.png" alt="back1_4" height=40% width=40%>
+<img src="images/back1_4.png" alt="back1_4" height=40% width=40%>
 
 - Обратное распространение. Пусть df = 1. Тогда 
 $$dc = {df \over dc}df = (c+1)'_{c} * 1 = 1$$
 $$db = {dc \over db}dc = (e^b)'_{b} * 1 = e^3 = 20$$
-<img src="images/LessonsII/back1_5.png" height=40% width=40%>
+<img src="images/back1_5.png" height=40% width=40%>
 
 $$dw_0 = {db \over dw_0}db = (a+w_0)'_{w_0} * 20 = 20$$
 $$da = {db \over da}db = (a+w_0)'_{a} * 20 = 20$$
-<img src="images/LessonsII/back1_6.png" height=40% width=40%>
+<img src="images/back1_6.png" height=40% width=40%>
 
 $$dw_1 = {da \over dw_1}da = (x*w_1)'_{w_1} * 20 = x*20 = 20$$
 $$dx = {da \over dx}da = (x*w_1)'_{x} * 20 = w_1*20 = 40$$
-<img src="images/LessonsII/back1_7.png" height=40% width=40%>
+<img src="images/back1_7.png" height=40% width=40%>
 
 # Обратное распространение ошибки. Пример с матрицами
 
 $$f={1 \over 2} ||X*W||^2_2$$
-<img src="images/LessonsII/back2_1.png" height=40% width=40%>
+<img src="images/back2_1.png" height=40% width=40%>
 
 - Начальное состояение весов и входного значения
-<img src="images/LessonsII/back2_2.png" height=40% width=40%>
+<img src="images/back2_2.png" height=40% width=40%>
 
 - Посчитаем значения по прямому проходу
-<img src="images/LessonsII/back2_3.png" height=40% width=40%>
+<img src="images/back2_3.png" height=40% width=40%>
 
 - Для удобства обозначим узлы (подфункции)  
-<img src="images/LessonsII/back2_4.png" height=40% width=40%>
+<img src="images/back2_4.png" height=40% width=40%>
 
 - Обратное распространение. Пусть df = 1. Тогда 
 $$db = {df \over db}df = ({1 \over 2}b)'_{b} * 1 = 0.5$$
 $$da_{ij} = {db \over da_{ij}}db = (a_{ij}^2)'_{a_{ij}} * 0.5 = a_{ij} $$
 или $$\nabla_a f = a$$
-<img src="images/LessonsII/back2_5.png" height=40% width=40%>
+<img src="images/back2_5.png" height=40% width=40%>
 
 $$\nabla_w f = X^T \nabla_a f$$
 
-<img src="images/LessonsII/back2_6.png" height=40% width=40%>
+<img src="images/back2_6.png" height=40% width=40%>
 
 # Переобучение
 **Недообучение** — нежелательное явление, возникающее при решении задач обучения по прецедентам, когда алгоритм обучения не обеспечивает достаточно малой величины средней ошибки на обучающей выборке. Недообучение возникает при использовании недостаточно сложных моделей.
@@ -373,7 +373,7 @@ $$\nabla_w f = X^T \nabla_a f$$
 img src="images/LessonsII/Overfitting.svg.png" width=80% height=80% />
 
 ### Процесс обучения
-<img src="images/LessonsII/Overfitting.curve.png" width=30% height=30% />
+<img src="images/Overfitting.curve.png" width=30% height=30% />
 
 ### Возможные решения при переобучении:
 * Увеличение количества данных в наборе;
@@ -398,7 +398,7 @@ img src="images/LessonsII/Overfitting.svg.png" width=80% height=80% />
 # Обучение с подкреплением
 Обучение с подкреплением — это метод машинного обучения, при котором происходит обучение модели, которая не имеет сведений о системе, но имеет возможность производить какие-либо действия в ней. Действия переводят систему в новое состояние и модель получает от системы некоторое вознаграждение
 
-<img src="images/LessonsII/reinforcement-learning-fig1-700.jpg" alt="RF">
+<img src="images/reinforcement-learning-fig1-700.jpg" alt="RF">
 
 ## Обучение модели
 https://media.giphy.com/media/PH67wPdphHPk4/giphy.gif
@@ -423,7 +423,7 @@ ___
    Метод forward должен реализовывать логику работу нейрона: умножение входа на вес self._weigths, сложение и функцию активации сигмоиду. 
    Метод backward должен реализовывать взятие производной от сигмоиды и используя состояние нейрона обновить его веса.
 3. Реализовать с помощью класса Neuron нейронную сеть с архитектурой из трёх нейронов, предложенную в статье:
-<img src="images/LessonsII/Neuron.png" alt="Neuron" height=40% width=40%>
+<img src="images/Neuron.png" alt="Neuron" height=40% width=40%>
 
 
 4. Для красоты обернуть в класс Model с методами forward и backward, реализующими правильное взаимодействие нейронов на прямом и обратном проходах.
