@@ -1,9 +1,9 @@
 # Позаимствованный исходный код
-Исходный код с 12 по 15 (вкл) задачи позаимствован отсюда:  
+Исходный код **с 12 по 15 (вкл) задание** позаимствован отсюда:  
 https://github.com/SampiNova/nsu_py
 
-16 Лабораторная  
-https://github.com/Zea-Zee/HWs/blob/main/PHC/Lesson13.ipynb
+**16 задание**  
+https://github.com/Zea-Zee/HWs/blob/main/PHC/
 
 # PAC
 Оригинал: https://github.com/vvabi-sabi/PAC/tree/main
