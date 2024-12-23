@@ -1,6 +1,6 @@
 # Обучение нейронных сетей
 
- ### Один нейрон
+### Один нейрон
 
 Напомним, что нейрон с $n$ входами характеризуется $n+1$ параметром: вектором нормали к разделяющей гиперплоскости $ω={ω_1,...,ω_n}$ и её сдвигом $ω_0$. Расстояние $d$ от вектора входа $x$ к гиперплоскости равно: $$ d=ω_0+ω_1x_1+...+ω_nx_n=ω_0+ωx=\sum_{i=0}^nω_ix_i. $$ 
 $$x_0 = 1 $$
@@ -160,7 +160,7 @@ F(x) = {e^{x} \over \sum_j e^{x_j}}
 $
 
 <img src="images/common_act_func.png" width=70% height=70% />
- Скорость обучения logistic-ой функции активации низкая с определенного момента (x > 3)
+Скорость обучения logistic-ой функции активации низкая с определенного момента (x > 3)
 
 # Функция потерь
 ### Регрессия
@@ -170,7 +170,7 @@ MAE = {1\over n}\sum_{i=1}^n|y_i - pred_i|
 $$
 *n - число признаков в выходном векторе*  
 *pred - предсказанный вектор*
-  
+
 **Средняя квадратичная ошибка**
 $$
 MSE = {1\over n}\sum_{i=1}^n(y_i - pred_i)^2
@@ -192,10 +192,10 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, log_loss
 ```python
 # MAE
 def mean_absolute_error(y, pred):
-    diff = y - pred # находим разницу между  наблюдаемыми значениями (y) и прогнозируемыми (pred)
-    abs_diff = np.absolute(diff) # находим абсолютную разность между прогнозами и фактическими наблюдениями.
-    mean_diff = abs_diff.mean() # находим среднее значение
-    return mean_diff
+	diff = y - pred # находим разницу между  наблюдаемыми значениями (y) и прогнозируемыми (pred)
+	abs_diff = np.absolute(diff) # находим абсолютную разность между прогнозами и фактическими наблюдениями.
+	mean_diff = abs_diff.mean() # находим среднее значение
+	return mean_diff
 
 y = np.array([1.1,2,1.7]) # создаем список актуальных значений
 pred = np.array([1,1.7,1.5]) # список прогнозируемых значений
@@ -207,7 +207,7 @@ mean_absolute_error(y, pred)
 
 
 
-    0.20000000000000004
+	0.20000000000000004
 
 
 
@@ -215,11 +215,11 @@ mean_absolute_error(y, pred)
 ```python
 # MSE
 def mean_squared_error(y, pred):
-    diff = y - pred # находим разницу между  наблюдаемыми значениями (y) и прогнозируемыми (pred)
-    differences_squared = diff ** 2 # возводим в квадрат (чтобы избавиться от отрицательных значений)
-    mean_diff = differences_squared.mean() # находим среднее значение
+	diff = y - pred # находим разницу между  наблюдаемыми значениями (y) и прогнозируемыми (pred)
+	differences_squared = diff ** 2 # возводим в квадрат (чтобы избавиться от отрицательных значений)
+	mean_diff = differences_squared.mean() # находим среднее значение
 
-    return mean_diff
+	return mean_diff
 
 y = np.array([1.1,2,1.7]) 
 pred = np.array([1,1.7,1.5]) 
@@ -231,7 +231,7 @@ mean_squared_error(y, pred)
 
 
 
-    0.04666666666666667
+	0.04666666666666667
 
 
 
@@ -239,11 +239,11 @@ mean_squared_error(y, pred)
 ```python
 # RMSE
 def root_mean_squared_error(y, pred):
-    diff = y - pred # находим разницу между  наблюдаемыми значениями (y) и прогнозируемыми (pred)
-    differences_squared = diff ** 2 # возводим в квадрат
-    mean_diff = differences_squared.mean() # находим среднее значение
-    rmse_val = np.sqrt(mean_diff) # извлекаем квадратный корень
-    return rmse_val
+	diff = y - pred # находим разницу между  наблюдаемыми значениями (y) и прогнозируемыми (pred)
+	differences_squared = diff ** 2 # возводим в квадрат
+	mean_diff = differences_squared.mean() # находим среднее значение
+	rmse_val = np.sqrt(mean_diff) # извлекаем квадратный корень
+	return rmse_val
 
 y = np.array([1.1,2,1.7])
 pred = np.array([1,1.7,1.5])
@@ -255,7 +255,7 @@ root_mean_squared_error(y, pred)
 
 
 
-    0.21602468994692867
+	0.21602468994692867
 
 
 
@@ -273,21 +273,21 @@ $$
 
 ```python
 def binary_cross_entropy(y, pred):
-    y = np.array([1 if el == "Cat" else 0 for el in y]) # [[0 1 1 0]]
-    pred = np.array([el[0] for el in pred])
-    CE = -y*np.log(pred) - (1 - y)*np.log((1-pred))
-    return CE.mean()
+	y = np.array([1 if el == "Cat" else 0 for el in y]) # [[0 1 1 0]]
+	pred = np.array([el[0] for el in pred])
+	CE = -y*np.log(pred) - (1 - y)*np.log((1-pred))
+	return CE.mean()
 
 labels = {"Cat": [1, 0], "Dog":[0,1]}
 
 def encode_label(y):
-    return np.array([labels[key] for key in y])
+	return np.array([labels[key] for key in y])
 
 def cross_entropy(y, pred):
-    y = encode_label(y) # [[0, 1], [1, 0], [1, 0], [0, 1]]
-    pred = np.array(pred)
-    CE = -np.sum(y*np.log(pred), axis=-1)
-    return CE.mean()
+	y = encode_label(y) # [[0, 1], [1, 0], [1, 0], [0, 1]]
+	pred = np.array(pred)
+	CE = -np.sum(y*np.log(pred), axis=-1)
+	return CE.mean()
 
 y = ["Dog", "Cat", "Cat", "Dog"] # список правильных меток классов
 pred = [[.1, .9], [.9, .1], [.8, .2], [.35, .65]] # [P(dog), P(cat)] # список вероятностей, предсказанных моделью.
@@ -300,7 +300,7 @@ cross_entropy(y, pred) # binary_cross_entropy(y, pred)
 
 
 
-    0.21616187468057912
+	0.21616187468057912
 
 
 
@@ -420,8 +420,8 @@ ___
 Что необходимо реализовать, используя знания и фрагменты кода из ссылки выше:  
 1. Класс Neuron, имеющий вектор весов self._weigths
 2. Два метода класса Neuron: forward(x), backward(x, loss) - реализующих прямой и обратный проход по нейронной сети. 
-   Метод forward должен реализовывать логику работу нейрона: умножение входа на вес self._weigths, сложение и функцию активации сигмоиду. 
-   Метод backward должен реализовывать взятие производной от сигмоиды и используя состояние нейрона обновить его веса.
+Метод forward должен реализовывать логику работу нейрона: умножение входа на вес self._weigths, сложение и функцию активации сигмоиду. 
+Метод backward должен реализовывать взятие производной от сигмоиды и используя состояние нейрона обновить его веса.
 3. Реализовать с помощью класса Neuron нейронную сеть с архитектурой из трёх нейронов, предложенную в статье:
 <img src="images/Neuron.png" alt="Neuron" height=40% width=40%>
 

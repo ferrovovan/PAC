@@ -1,3 +1,10 @@
+# Позаимствованный исходный код
+Исходный код с 12 по 15 (вкл) задачи позаимствован отсюда:  
+https://github.com/SampiNova/nsu_py
+
+16 Лабораторная  
+https://github.com/Zea-Zee/HWs/blob/main/PHC/Lesson13.ipynb
+
 # PAC
 Оригинал: https://github.com/vvabi-sabi/PAC/tree/main
 
@@ -38,4 +45,15 @@ python3 -m nbconvert --to markdown Lesson${i}.ipynb
 ```
 sudo apt update
 sudo apt install python3-opencv python3-pandas python3-sklearn python3-xgboost
+```
+### Для 16 лабораторной
+```
+sudo apt install python3-pip python3-dev libtorch-dev
+
+# torch (PyTorch, для машинного обучения и нейронных сетей)
+pip install torch
+# nltk (Natural Language Toolkit для обработки текста)
+pip install nltk
+# gensim (Для работы с моделями типа Word2Vec)
+pip install gensim
 ```
