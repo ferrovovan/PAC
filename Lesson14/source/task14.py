@@ -7,20 +7,43 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
 def im2col(image, kernel_size=1, stride=1, padding=0):
+	"""
+	# image - входной тензор
+	# N — число изображений (размер батча),
+	# C — число каналов,
+	# H, W — высота и ширина изображений.
+	"""
 	N, C, H, W = image.shape
 
+	# Добавляет границы к изображению
 	padded = F.pad(image, [padding] * 4, mode='constant', value=0)
 
 	_, _, padded_H, padded_W = padded.shape
 
+	# Расчёт размеров выхода после применения ядра свёртки
 	output_H = (padded_H - kernel_size) // stride + 1
 	output_W = (padded_W - kernel_size) // stride + 1
 
+	"""
+	cols — выходной тензор с размером:
+	N — батч,
+	C⋅kernel_size⋅kernel_size — количество элементов фильтра (размер вектора для каждого региона),
+	output_H⋅output_W — количество перемещений фильтра по всему изображению (общее число блоков).
+	"""
 	cols = torch.zeros((N, C * kernel_size * kernel_size, output_H * output_W), device=image.device)
+	# Двойной цикл по выходу:
+	# Идём по всем положениям, в которые может встать фильтр (выходной размер output_H×output_W):
 	for i in range(output_H):
 		for j in range(output_W):
-			patch = padded[:, :, i * stride:i * stride + kernel_size, j * stride:j * stride + kernel_size]
-			cols[:, :, i * output_W + j] = patch.reshape(N, -1)
+			# Выбираем часть изображения
+			patch = padded[:, :,
+				i * stride:i * stride + kernel_size, # по вертикали
+				j * stride:j * stride + kernel_size  # по горизонтали
+			]
+			# "Расплющиваем" выбранный патч (преобразуем его в вектор размером C⋅kernel_size⋅kernel_size)
+			patch = patch.reshape(N, -1)
+			# Сохраняем полученный "регион" (патч) в соответствующий столбец cols.
+			cols[:, :, i * output_W + j] = patch
 
 	return cols
 

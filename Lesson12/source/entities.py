@@ -4,6 +4,7 @@ import numpy as np
 
 def reshape(array):
 	array = np.asarray(array)
+	# Убедиться, что массив array имеет хотя бы две оси (включая ось "длина батча").
 	if len(array.shape) < 2:
 		return np.expand_dims(array, 0)
 	return array
@@ -32,7 +33,6 @@ def xavier_normal(shape: tuple[int, int], gain: float = 1.0) -> np.ndarray:
 	stddev = gain * np.sqrt(2.0 / (fan_in + fan_out))
 	# Возвращаем случайные значения из нормального распределения
 	return np.random.normal(0, stddev, size=shape)
-
 
 
 class Neuron:
@@ -94,8 +94,8 @@ class Model:
 		self.layers: list[list[Neuron]] = []
 		for i in range(1, len(architecture)):
 			neurons = []
-			weights = xavier_normal((layers[i - 1], layers[i]))
-			biases = xavier_normal((layers[i], 1))
+			weights = xavier_normal( (architecture[i - 1], architecture[i]) )
+			biases = xavier_normal(  (architecture[i], 1) )
 			for j in range(architecture[i]):
 				neurons.append(
 					Neuron(reshape(weights[:, j]).T, reshape(biases[j]), f"{i}-{j}")

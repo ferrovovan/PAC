@@ -35,7 +35,7 @@ def main():
 	data_dir = "./processed_data"
 	load_model = 1
 	save_model = 0
-	evaluate_model = 0
+	evaluate_model = 1
 	visualize_with_tsne = 1
 
 	train_data: list[np.array, np.array]

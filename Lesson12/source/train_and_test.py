@@ -8,16 +8,18 @@ from functions import mse_loss, mse_derivative
 from entities import Model
 
 
+def echo_green(text: str):
+	print(f"\033[0;32m{text}\033[0m")
+
 def train_and_evaluate(
-	model: Model, train_data,
+	model: Model, train_data: tuple[np.array, np.array],
 	epochs: int, lr: float, patience=0.75
 ):
 	loss_history, accuracy_history = [], []
 	best_accuracy = 0
-
 	for epoch in range(epochs):
 		epoch_loss, predictions = [], []
-		for X, y in train_data:
+		for X, y in zip(train_data[0], train_data[1]):
 			pred = model.forward(X)
 			model.backprop(np.round(
 				mse_derivative(pred, y))
@@ -27,6 +29,7 @@ def train_and_evaluate(
 			epoch_loss.append(mse_loss(pred, y)[0, 0])
 			predictions.append(np.round(pred[0, 0]))
 
+		epoch_loss = np.array(epoch_loss)
 		mean_loss = np.mean(epoch_loss)
 		accuracy: float = accuracy_score(y_train, predictions)
 		loss_history.append(mean_loss)
@@ -61,19 +64,19 @@ if __name__ == "__main__":
 	lr = 0.1 # learning rate
 	epochs = 1000
 	model = Model([2, 2, 1])
-	print("start training and evaluating")
+	echo_green("Start training and evaluating...\n")
 	model, loss, accuracy = train_and_evaluate(
-		model, zip(X_train, y_train),
+		model, (X_train, y_train),
 		epochs=epochs, lr=lr, patience=0.8
 	)
-	print("Final Weights and Biases:")
+	echo_green("Final Weights and Biases:")
 	for layer in model.layers:
 		for neuron in layer:
 			print("neuron", neuron)
 			print("weight: ", neuron.weights)
 			print("bias: ", neuron.bias)
 
-	print("predictions:")
+	echo_green("\nPredictions:")
 	my_pred = []
 	for x in X_train:
 		pred = model.forward(x)[0][0]

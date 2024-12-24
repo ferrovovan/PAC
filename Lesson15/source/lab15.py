@@ -71,7 +71,11 @@ if __name__ == "__main__":
 	transform = transforms.Compose([
 		transforms.Resize((224, 224)),
 		transforms.ToTensor(),
-		transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+		transforms.Normalize(
+			# Это средние значения по всем пикселям в каждом канале (R, G, B) для всех изображений из ImageNet.
+			mean=[0.485, 0.456, 0.406],
+			# Это стандартное отклонение интенсивностей в каждом канале RGB для ImageNet.
+			std=[0.229, 0.224, 0.225]),
 	])
 	while True:
 		ret, frame = cap.read()
